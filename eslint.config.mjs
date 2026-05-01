@@ -1,6 +1,5 @@
 import { globalIgnores } from 'eslint/config'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
 import stylistic from '@stylistic/eslint-plugin'
 
@@ -18,7 +17,6 @@ export default defineConfigWithVueTs(
     '**/package-lock.json',
   ]),
 
-  ...pluginVue.configs['flat/recommended'],
   vueTsConfigs.recommended,
 
   {
@@ -38,10 +36,6 @@ export default defineConfigWithVueTs(
       '@stylistic/padded-blocks': 'off',
       '@stylistic/no-trailing-spaces': ['error', { skipBlankLines: true }],
       '@stylistic/brace-style': 'off',
-      'vue/multi-word-component-names': 'off',
-      'vue/block-tag-newline': ['error', { multiline: 'ignore', singleline: 'ignore' }],
-      'vue/multiline-html-element-content-newline': ['error', { allowEmptyLines: true, ignores: ['pre', 'textarea'] }],
-      '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'with-single-extends' }],
     },
   },
 )
