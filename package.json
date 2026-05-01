@@ -14,7 +14,7 @@
     "url": "https://github.com/favorodera/use-promise/issues"
   },
   "exports": {
-    ".": "./dist/index.mjs",
+    ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
   "files": [
