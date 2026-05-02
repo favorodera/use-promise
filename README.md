@@ -44,8 +44,8 @@ import { usePromise } from '@favorodera/use-promise'
 
 const { state, execute, abort, reset } = usePromise(
   async (signal, id: string) => {
-    const res = await fetch(`/api/users/${id}`, { signal })
-    return res.json()
+    const response = await fetch(`/api/users/${id}`, { signal })
+    return response.json()
   }
 )
 
