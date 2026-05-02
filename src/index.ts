@@ -1,6 +1,9 @@
-import { readonly, shallowRef, computed } from 'vue'
+import { readonly, shallowRef } from 'vue'
 import type { PromiseState } from './types'
 import { toError } from './utils'
+
+export type * from './types'
+
 
 /**
  * A Vue composable for managing async operations with reactive state,
@@ -11,9 +14,9 @@ import { toError } from './utils'
  * - Prevents stale responses from overwriting newer ones
  * - Supports request cancellation via AbortController
  *
- * @template TData    Resolved value type
- * @template TError     Error type (must extend Error)
- * @template TArguments Argument tuple for the callback
+ * @template TData Resolved value type
+ * @template TError Error type (must extend Error)
+ * @template TArguments Argument tuple passed to the callback
  *
  * @param callback Async function that receives an AbortSignal as its first argument
  *
@@ -48,9 +51,18 @@ export function usePromise<
    * - Does NOT set error state
    * - Keeps existing data intact
    */
-  function abort() {
+  function abort(): void {
     controller?.abort()
     controller = null
+  }
+
+  function reset(): void {
+    abort()
+    state.value = {
+      status: 'idle',
+      data: null,
+      error: null,
+    }
   }
 
   /**
@@ -63,7 +75,8 @@ export function usePromise<
    * - Prevents stale responses from overwriting newer ones
    *
    * @param args Arguments passed to the callback
-   * @returns The resolved value (optional)
+   * @returns The resolved value if successful, otherwise undefined.
+   * Errors are reflected in `state.error`.
    */
   async function execute(...args: TArguments): Promise<TData | undefined> {
     const currentId = ++executionId
@@ -102,12 +115,6 @@ export function usePromise<
     }
   }
 
-  // Derived state helpers for easier UI usage.
-  const isIdle = computed(() => state.value.status === 'idle')
-  const isPending = computed(() => state.value.status === 'pending')
-  const isSuccess = computed(() => state.value.status === 'success')
-  const isError = computed(() => state.value.status === 'error')
-
   return {
     /** Reactive promise state */
     state: readonly(state),
@@ -118,14 +125,7 @@ export function usePromise<
     /** Abort any in-flight request */
     abort,
 
-    // Convenience state flags
-    /** True if the promise is in idle state */
-    isIdle,
-    /** True if the promise is in pending state */
-    isPending,
-    /** True if the promise is in success state */
-    isSuccess,
-    /** True if the promise is in error state */
-    isError,
+    /** Reset the promise state */
+    reset,
   }
 }
