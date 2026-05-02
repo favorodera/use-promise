@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.0.0-alpha.0...v1.0.0-alpha.1
+
+[compare changes](https://github.com/favorodera/use-promise/compare/v1.0.0-alpha.0...v1.0.0-alpha.1)
+
+### Styling
+
+- Enhance `toError` function clarity with JSDoc and explicit return type ([6732a12](https://github.com/favorodera/use-promise/commit/6732a12))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v0.0.0...v1.0.0-alpha.0
 
 [compare changes](https://github.com/favorodera/use-promise/compare/f06cffe74b9ba1c4dcf66647c1307da066de09c8...v1.0.0-alpha.0)
