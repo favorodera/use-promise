@@ -107,8 +107,8 @@ execute('123')
 </script>
 
 <template>
-  <div v-if="state.value.status === 'pending'">Loading...</div>
-  <div v-else-if="state.value.status === 'error'">{{ state.value.error?.message }}</div>
-  <div v-else>{{ state.value.data }}</div>
+  <div v-if="state.status === 'pending'">Loading...</div>
+  <div v-else-if="state.status === 'error'">{{ state.error?.message }}</div>
+  <div v-else>{{ state.data }}</div>
 </template>
 ```
