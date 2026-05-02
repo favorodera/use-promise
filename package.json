@@ -1,6 +1,6 @@
 {
   "name": "@favorodera/use-promise",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.0",
   "type": "module",
   "description": "A Vue reactive promise wrapper for handling async operations.",
   "license": "MIT",
