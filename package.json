@@ -54,5 +54,21 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "composition-api",
+    "composable",
+    "reactive",
+    "async",
+    "promise",
+    "async-state",
+    "state-management",
+    "abortcontroller",
+    "cancellation",
+    "race-condition",
+    "data-fetching",
+    "fetch"
+  ]
 }
