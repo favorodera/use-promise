@@ -2,7 +2,7 @@
   "name": "@favorodera/use-promise",
   "version": "1.0.0-alpha.1",
   "type": "module",
-  "description": "A Vue reactive promise wrapper for handling async operations.",
+  "description": "A Vue composable for managing async operations with reactive state, cancellation, and race-condition safety.",
   "license": "MIT",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "homepage": "https://github.com/favorodera/use-promise#readme",
