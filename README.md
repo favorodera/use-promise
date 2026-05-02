@@ -1,9 +1,11 @@
 # usePromise
 
-[![npm version](https://img.shields.io/npm/v/@favorodera/use-promise.svg?style=flat-square)](https://www.npmjs.com/package/@favorodera/use-promise)
-[![npm downloads](https://img.shields.io/npm/dm/@favorodera/use-promise.svg?style=flat-square)](https://www.npmjs.com/package/@favorodera/use-promise)
-[![license](https://img.shields.io/github/license/favorodera/use-promise.svg?style=flat-square)](https://github.com/favorodera/use-promise/blob/main/LICENSE)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@favorodera/use-promise.svg?style=flat-square)](https://bundlephobia.com/package/@favorodera/use-promise)
+---
+
+  [![npm version](https://img.shields.io/npm/v/@favorodera/use-promise.svg?style=flat-square)](https://www.npmjs.com/package/@favorodera/use-promise)
+  [![npm downloads](https://img.shields.io/npm/dm/@favorodera/use-promise.svg?style=flat-square)](https://www.npmjs.com/package/@favorodera/use-promise)
+  [![license](https://img.shields.io/github/license/favorodera/use-promise.svg?style=flat-square)](https://github.com/favorodera/use-promise/blob/main/LICENSE)
+  [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@favorodera/use-promise.svg?style=flat-square)](https://bundlephobia.com/package/@favorodera/use-promise)
 
 ---
 
