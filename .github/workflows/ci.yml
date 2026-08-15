@@ -39,10 +39,6 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Notify Vercel
-        uses: vercel/repository-dispatch/actions/status@v1
-        with:
-          name: CI Checks
 
   preview:
     name: Publish Preview Packages
