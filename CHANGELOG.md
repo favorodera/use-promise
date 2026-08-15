@@ -1,5 +1,49 @@
 # Changelog
 
+## v1.0.0...v1.0.1
+
+[compare changes](https://github.com/favorodera/use-promise/compare/v1.0.0...v1.0.1)
+
+### Fixed
+
+- **ci:** Fix syntax error in preview publish step ([e779cff](https://github.com/favorodera/use-promise/commit/e779cff))
+
+### Documentation
+
+- Improve variable naming in usePromise example ([e869b81](https://github.com/favorodera/use-promise/commit/e869b81))
+- **readme:** Update project description in header ([e71d65e](https://github.com/favorodera/use-promise/commit/e71d65e))
+
+  - Fix placeholder tagline in header block
+  - Remove duplicate description text below badges
+
+- **readme:** Update PromiseState type definition ([a40faf2](https://github.com/favorodera/use-promise/commit/a40faf2))
+
+  - Align state shape docs with actual types
+  - Include undefined in data and error unions
+
+
+### Chores
+
+- Add keywords to package.json ([cc1248c](https://github.com/favorodera/use-promise/commit/cc1248c))
+- Modernize project configuration and types ([46499d7](https://github.com/favorodera/use-promise/commit/46499d7))
+
+  - Switch initial state values from null to undefined
+  - Upgrade dependencies and ESLint configuration
+  - Update GitHub templates to form-based YAML
+  - Refactor release and CI workflows with actions v7
+
+- **ci:** Simplify package build and publish ([2966416](https://github.com/favorodera/use-promise/commit/2966416))
+
+  - Remove redundant workspace package filters
+  - Rely on default package discovery in CI tasks
+
+- **ci:** Remove Vercel notification step ([4e8c715](https://github.com/favorodera/use-promise/commit/4e8c715))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v0.0.0...v1.0.0
 
 [compare changes](https://github.com/favorodera/use-promise/compare/f06cffe74b9ba1c4dcf66647c1307da066de09c8...v1.0.0)

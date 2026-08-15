@@ -1,7 +1,7 @@
 {
   "name": "@favorodera/use-promise",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "packageManager": "pnpm@11.20.0",
   "description": "A Vue composable for managing async operations with reactive state, cancellation, and race-condition safety.",
   "author": "Favour Emeka <favorodera@gmail.com>",
@@ -27,7 +27,9 @@
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=22.0.0",
     "pnpm": ">=11.0.0"
