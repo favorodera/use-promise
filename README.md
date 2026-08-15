@@ -71,11 +71,28 @@ execute('123')
 ## State Shape
 
 ```ts
-type PromiseState<TData, TError extends Error = Error>
-  = | { data: null, error: null, status: 'idle' }
-    | { data: null | TData, error: null, status: 'pending' }
-    | { data: null | TData, error: TError, status: 'error' }
-    | { data: TData, error: null, status: 'success' }
+export type PromiseState<TData, TError extends Error = Error>
+  = |
+    {
+      data: null | TData | undefined
+      error: null | undefined
+      status: 'pending'
+    }
+    | {
+      data: null | TData | undefined
+      error: TError
+      status: 'error'
+    }
+    | {
+      data: null | undefined
+      error: null | undefined
+      status: 'idle'
+    }
+    | {
+      data: TData
+      error: null | undefined
+      status: 'success'
+    }
 ```
 
 `data` is preserved across `pending` and `error` states — no UI flicker on reload or failure.
