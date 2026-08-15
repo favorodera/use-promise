@@ -4,8 +4,24 @@
  * @template TError The type of the error.
  */
 export type PromiseState<TData, TError extends Error = Error>
-  = | { status: 'idle', data: null, error: null }
-    | { status: 'pending', data: TData | null, error: null }
-    | { status: 'success', data: TData, error: null }
-    | { status: 'error', data: TData | null, error: TError }
-
+  = |
+    {
+      data: null | TData | undefined
+      error: null | undefined
+      status: 'pending'
+    }
+    | {
+      data: null | TData | undefined
+      error: TError
+      status: 'error'
+    }
+    | {
+      data: null | undefined
+      error: null | undefined
+      status: 'idle'
+    }
+    | {
+      data: TData
+      error: null | undefined
+      status: 'success'
+    }

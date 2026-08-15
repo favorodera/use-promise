@@ -1,25 +1,23 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { usePromise } from '../src'
 import { deferred, rejects, resolves } from './test-utils'
-
 
 describe('init', () => {
   it('starts in idle state', () => {
     const { state } = usePromise(resolves('x'))
 
-    expect(state.value).toEqual({
+    expect(state.value).toStrictEqual({
+      data: undefined,
+      error: undefined,
       status: 'idle',
-      data: null,
-      error: null,
     })
   })
 })
 
 describe('success path', () => {
   it('transitions: idle => pending => success', async () => {
-    const { state, execute } = usePromise(resolves('hello'))
+    const { execute, state } = usePromise(resolves('hello'))
 
     const promise = execute()
 
@@ -28,10 +26,10 @@ describe('success path', () => {
 
     await promise
 
-    expect(state.value).toEqual({
-      status: 'success',
+    expect(state.value).toStrictEqual({
       data: 'hello',
-      error: null,
+      error: undefined,
+      status: 'success',
     })
   })
 
@@ -43,9 +41,7 @@ describe('success path', () => {
   })
 
   it('passes arguments to callback', async () => {
-    const callback = vi.fn((_signal: AbortSignal, a: number, b: number) =>
-      Promise.resolve(a + b),
-    )
+    const callback = vi.fn((_signal: AbortSignal, a: number, b: number) => Promise.resolve(a + b))
 
     const { execute } = usePromise(callback)
 
@@ -58,19 +54,19 @@ describe('success path', () => {
 describe('error path', () => {
   it('sets error state on rejection', async () => {
     const error = new Error('boom')
-    const { state, execute } = usePromise(rejects(error))
+    const { execute, state } = usePromise(rejects(error))
 
     await execute()
 
-    expect(state.value).toEqual({
-      status: 'error',
-      data: null,
+    expect(state.value).toStrictEqual({
+      data: undefined,
       error,
+      status: 'error',
     })
   })
 
   it('coerces non-Error values into Error', async () => {
-    const { state, execute } = usePromise(rejects('string error'))
+    const { execute, state } = usePromise(rejects('string error'))
 
     await execute()
 
@@ -89,13 +85,12 @@ describe('error path', () => {
     const slow = deferred<string>()
     let shouldFail = true
 
-    const { state, execute } = usePromise((_signal: AbortSignal) =>
-      shouldFail
-        ? Promise.reject(new Error('fail'))
-        : slow.promise,
-    )
+    const { execute, state } = usePromise((_signal: AbortSignal) => (shouldFail
+      ? Promise.reject(new Error('fail'))
+      : slow.promise))
 
     await execute()
+
     expect(state.value.status).toBe('error')
 
     shouldFail = false
@@ -105,7 +100,7 @@ describe('error path', () => {
 
     // NOW we can observe pending
     expect(state.value.status).toBe('pending')
-    expect(state.value.error).toBeNull()
+    expect(state.value.error).toBeNullable()
 
     slow.resolve('ok')
     await nextTick()
@@ -119,7 +114,7 @@ describe('data preservation', () => {
     let firstCall = true
     const slow = deferred<string>()
 
-    const { state, execute } = usePromise((_signal: AbortSignal) => {
+    const { execute, state } = usePromise((_signal: AbortSignal) => {
       if (firstCall) {
         firstCall = false
         return Promise.resolve('cached')
@@ -128,6 +123,7 @@ describe('data preservation', () => {
     })
 
     await execute()
+
     expect(state.value.data).toBe('cached')
 
     // Trigger second call => pending
@@ -135,19 +131,18 @@ describe('data preservation', () => {
     await nextTick()
 
     expect(state.value.status).toBe('pending')
-    expect(state.value.data).toBe('cached') // still there
+    expect(state.value.data).toBe('cached')
   })
 
   it('preserves last successful data on error', async () => {
     let shouldFail = false
 
-    const { state, execute } = usePromise((_signal: AbortSignal) =>
-      shouldFail
-        ? Promise.reject(new Error('fail'))
-        : Promise.resolve('good'),
-    )
+    const { execute, state } = usePromise((_signal: AbortSignal) => (shouldFail
+      ? Promise.reject(new Error('fail'))
+      : Promise.resolve('good')))
 
     await execute()
+
     expect(state.value.data).toBe('good')
 
     shouldFail = true
@@ -161,7 +156,7 @@ describe('data preservation', () => {
 describe('abort behaviour', () => {
   it('does not update state after abort', async () => {
     const pending = deferred<string>()
-    const { state, execute, abort } = usePromise(() => pending.promise)
+    const { abort, execute, state } = usePromise(() => pending.promise)
 
     execute()
     await nextTick()
@@ -177,7 +172,7 @@ describe('abort behaviour', () => {
 
   it('abort is silent (no error state)', async () => {
     const pending = deferred<string>()
-    const { state, execute, abort } = usePromise(() => pending.promise)
+    const { abort, execute, state } = usePromise(() => pending.promise)
 
     execute()
     abort()
@@ -185,14 +180,14 @@ describe('abort behaviour', () => {
     pending.resolve('ignored')
     await nextTick()
 
-    expect(state.value.error).toBeNull()
+    expect(state.value.error).toBeNullable()
   })
 
   it('preserves existing data on abort', async () => {
     let first = true
     const pending = deferred<string>()
 
-    const { state, execute, abort } = usePromise((_signal: AbortSignal) => {
+    const { abort, execute, state } = usePromise((_signal: AbortSignal) => {
       if (first) {
         first = false
         return Promise.resolve('kept')
@@ -201,6 +196,7 @@ describe('abort behaviour', () => {
     })
 
     await execute()
+
     expect(state.value.data).toBe('kept')
 
     execute()
@@ -218,37 +214,42 @@ describe('abort behaviour', () => {
     const { execute } = usePromise((_signal: AbortSignal) => {
       if (first) {
         first = false
-        return new Promise(() => {}) // never resolves
+        return new Promise(() => {
+          // never resolves
+        })
       }
       return Promise.resolve('done')
     })
 
-    execute() // stuck
+    // stuck
+    execute()
 
     const result = await execute()
+
     expect(result).toBe('done')
   })
 })
 
 describe('reset', () => {
   it('reset returns state to idle', async () => {
-    const { state, execute, reset } = usePromise(resolves('data'))
+    const { execute, reset, state } = usePromise(resolves('data'))
 
     await execute()
+
     expect(state.value.status).toBe('success')
 
     reset()
 
-    expect(state.value).toEqual({
+    expect(state.value).toStrictEqual({
+      data: undefined,
+      error: undefined,
       status: 'idle',
-      data: null,
-      error: null,
     })
   })
 
   it('reset aborts in-flight request', async () => {
     const pending = deferred<string>()
-    const { state, execute, reset } = usePromise(() => pending.promise)
+    const { execute, reset, state } = usePromise(() => pending.promise)
 
     execute()
     await nextTick()
@@ -268,13 +269,16 @@ describe('race conditions', () => {
     const second = deferred<string>()
     let callCount = 0
 
-    const { state, execute } = usePromise(() => {
+    const { execute, state } = usePromise(() => {
       callCount++
       return callCount === 1 ? first.promise : second.promise
     })
 
-    execute() // slow
-    execute() // fast
+    // slow
+    execute()
+
+    // fast
+    execute()
 
     second.resolve('fresh')
     await nextTick()
@@ -290,7 +294,7 @@ describe('race conditions', () => {
     const second = deferred<string>()
     let callCount = 0
 
-    const { state, execute } = usePromise(() => {
+    const { execute, state } = usePromise(() => {
       callCount++
       return callCount === 1 ? first.promise : second.promise
     })
@@ -308,4 +312,3 @@ describe('race conditions', () => {
     expect(state.value.data).toBe('correct')
   })
 })
-

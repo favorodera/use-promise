@@ -4,7 +4,6 @@ import { toError } from './utils'
 
 export type * from './types'
 
-
 /**
  * A Vue composable for managing async operations with reactive state,
  * cancellation support, and race-condition safety.
@@ -13,13 +12,11 @@ export type * from './types'
  * - Preserves previous data during reloads and errors
  * - Prevents stale responses from overwriting newer ones
  * - Supports request cancellation via AbortController
- *
  * @template TData Resolved value type
  * @template TError Error type (must extend Error)
  * @template TArguments Argument tuple passed to the callback
- *
  * @param callback Async function that receives an AbortSignal as its first argument
- *
+ * @returns The resolved value if successful, otherwise undefined.
  * @example
  * const { state, execute } = usePromise(
  *   async (signal, id: string) => fetch(`/api/users/${id}`, { signal }).then(response => response.json())
@@ -27,21 +24,15 @@ export type * from './types'
  *
  * execute('123')
  */
-export function usePromise<
-  TData = unknown,
-  TError extends Error = Error,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TArguments extends any[] = [],
->(
-  callback: (signal: AbortSignal, ...args: TArguments) => Promise<TData>,
-) {
+// eslint-disable-next-line ts/no-explicit-any
+export function usePromise<TData = unknown, TError extends Error = Error, TArguments extends Array<any> = []>(callback: (signal: AbortSignal, ...args: TArguments) => Promise<TData>) {
   const state = shallowRef<PromiseState<TData, TError>>({
+    data: undefined,
+    error: undefined,
     status: 'idle',
-    data: null,
-    error: null,
   })
 
-  let controller: AbortController | null = null
+  let controller: AbortController | null | undefined
   let executionId = 0
 
   /**
@@ -53,15 +44,16 @@ export function usePromise<
    */
   function abort(): void {
     controller?.abort()
-    controller = null
+    controller = undefined
   }
 
+  /** Aborts any in-flight execution and resets the state to idle. */
   function reset(): void {
     abort()
     state.value = {
+      data: undefined,
+      error: undefined,
       status: 'idle',
-      data: null,
-      error: null,
     }
   }
 
@@ -73,7 +65,6 @@ export function usePromise<
    * - Sets state to `pending`
    * - Preserves previous data during loading
    * - Prevents stale responses from overwriting newer ones
-   *
    * @param args Arguments passed to the callback
    * @returns The resolved value if successful, otherwise undefined.
    * Errors are reflected in `state.error`.
@@ -87,30 +78,31 @@ export function usePromise<
     const { signal } = controller
 
     state.value = {
-      status: 'pending',
       data: state.value.data,
-      error: null,
+      error: undefined,
+      status: 'pending',
     }
 
     try {
+      // eslint-disable-next-line node/callback-return
       const data = await callback(signal, ...args)
 
       // Ignore stale or aborted responses
       if (signal.aborted || currentId !== executionId) return
 
-      state.value = { status: 'success', data, error: null }
+      state.value = { data, error: undefined, status: 'success' }
       return data
     } catch (error) {
       if (signal.aborted || currentId !== executionId) return
 
       state.value = {
-        status: 'error',
         data: state.value.data,
         error: toError<TError>(error),
+        status: 'error',
       }
     } finally {
       if (currentId === executionId) {
-        controller = null
+        controller = undefined
       }
     }
   }

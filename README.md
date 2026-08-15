@@ -1,13 +1,12 @@
-# usePromise
-
----
-
-  [![npm version](https://img.shields.io/npm/v/@favorodera/use-promise.svg?style=flat-square)](https://www.npmjs.com/package/@favorodera/use-promise)
-  [![npm downloads](https://img.shields.io/npm/dm/@favorodera/use-promise.svg?style=flat-square)](https://www.npmjs.com/package/@favorodera/use-promise)
-  [![license](https://img.shields.io/github/license/favorodera/use-promise.svg?style=flat-square)](https://github.com/favorodera/use-promise/blob/main/LICENSE)
-  [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@favorodera/use-promise.svg?style=flat-square)](https://bundlephobia.com/package/@favorodera/use-promise)
-
----
+<div align="center">
+<h1><code>usePromise</code></h1>
+<p><strong>Foundation for your Vue documentation.</strong></p>
+<p>
+<a href="https://npmx.dev/package/@favorodera/use-promise"><img src="https://img.shields.io/npm/v/@favorodera/use-promise.svg?style=plastic&label=NPM%20Version&color=blue" alt="NPM Version"></a>
+<a href="https://npmx.dev/package/@favorodera/use-promise"><img src="https://img.shields.io/npm/dt/@favorodera/use-promise.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
+<a href="https://npmx.dev/package/@favorodera/use-promise"><img src="https://img.shields.io/npm/unpacked-size/@favorodera/use-promise?style=plastic&label=NPM%20Unpacked%20Size&color=blue" alt="NPM Unpacked Size"></a>
+</p>
+</div>
 
 A Vue composable for async operations with reactive state, cancellation, and race-condition safety.
 
@@ -42,12 +41,10 @@ export default defineNuxtConfig({
 ```ts
 import { usePromise } from '@favorodera/use-promise'
 
-const { state, execute, abort, reset } = usePromise(
-  async (signal, id: string) => {
-    const response = await fetch(`/api/users/${id}`, { signal })
-    return response.json()
-  }
-)
+const { abort, execute, reset, state } = usePromise(async (signal, id: string) => {
+  const response = await fetch(`/api/users/${id}`, { signal })
+  return response.json()
+})
 
 execute('123')
 ```
@@ -76,11 +73,11 @@ execute('123')
 ## State Shape
 
 ```ts
-type PromiseState<TData, TError extends Error = Error> =
-  | { status: 'idle';    data: null;          error: null   }
-  | { status: 'pending'; data: TData | null;  error: null   }
-  | { status: 'success'; data: TData;         error: null   }
-  | { status: 'error';   data: TData | null;  error: TError }
+type PromiseState<TData, TError extends Error = Error>
+  = | { data: null, error: null, status: 'idle' }
+    | { data: null | TData, error: null, status: 'pending' }
+    | { data: null | TData, error: TError, status: 'error' }
+    | { data: TData, error: null, status: 'success' }
 ```
 
 `data` is preserved across `pending` and `error` states — no UI flicker on reload or failure.
@@ -107,22 +104,26 @@ type PromiseState<TData, TError extends Error = Error> =
 <script setup lang="ts">
 import { usePromise } from '@favorodera/use-promise'
 
-const { state, execute } = usePromise(
-  async (signal, id: string) => {
-    const response = await fetch(
-      `https://jsonplaceholder.typicode.com/users/${id}`,
-      { signal }
-    )
-    return response.json()
-  }
-)
+const { execute, state } = usePromise(async (signal, id: string) => {
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/users/${id}`,
+    { signal }
+  )
+  return response.json()
+})
 
 execute('1')
 </script>
 
 <template>
-  <div v-if="state.status === 'pending'">Loading...</div>
-  <div v-else-if="state.status === 'error'">{{ state.error?.message }}</div>
+  <div v-if="state.status === 'pending'">
+    Loading...
+  </div>
+
+  <div v-else-if="state.status === 'error'">
+    {{ state.error?.message }}
+  </div>
+
   <pre v-else>{{ state.data }}</pre>
 </template>
 ```
@@ -135,19 +136,26 @@ execute('1')
 <script setup lang="ts">
 import { usePromise } from '@favorodera/use-promise'
 
-const { state, execute } = usePromise(
-  async (_signal, name: string) => {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    return `Hello, ${name}!`
-  }
-)
+const { execute, state } = usePromise(async (_signal, name: string) => {
+  await new Promise((resolve) => {
+    setTimeout(resolve, 1000)
+  })
+  return `Hello, ${name}!`
+})
 </script>
 
 <template>
-  <button @click="execute('Alice')">Greet</button>
+  <button @click="execute('Alice')">
+    Greet
+  </button>
 
-  <div v-if="state.status === 'pending'">Waiting...</div>
-  <div v-else-if="state.status === 'success'">{{ state.data }}</div>
+  <div v-if="state.status === 'pending'">
+    Waiting...
+  </div>
+
+  <div v-else-if="state.status === 'success'">
+    {{ state.data }}
+  </div>
 </template>
 ```
 ---
@@ -156,20 +164,18 @@ const { state, execute } = usePromise(
 
 ```vue
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import { usePromise } from '@favorodera/use-promise'
+import { ref, watch } from 'vue'
 
 const idToSearch = ref('')
 
-const { state, execute } = usePromise(
-  async (signal, id: string) => {
-    const response = await fetch(
-      `https://jsonplaceholder.typicode.com/users/${id}`,
-      { signal }
-    )
-    return response.json()
-  }
-)
+const { execute, state } = usePromise(async (signal, id: string) => {
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/users/${id}`,
+    { signal }
+  )
+  return response.json()
+})
 
 watch(idToSearch, (id) => {
   if (id) execute(id)
@@ -177,10 +183,19 @@ watch(idToSearch, (id) => {
 </script>
 
 <template>
-  <input v-model="idToSearch" placeholder="Enter user id to fetch" />
+  <input
+    v-model="idToSearch"
+    placeholder="Enter user id to fetch"
+  >
 
-  <div v-if="state.status === 'pending'">Searching...</div>
-  <div v-else-if="state.status === 'error'">{{ state.error }}</div>
+  <div v-if="state.status === 'pending'">
+    Searching...
+  </div>
+
+  <div v-else-if="state.status === 'error'">
+    {{ state.error }}
+  </div>
+
   <pre v-else>{{ state.data }}</pre>
 </template>
 ```
@@ -193,20 +208,31 @@ watch(idToSearch, (id) => {
 <script setup lang="ts">
 import { usePromise } from '@favorodera/use-promise'
 
-const { state, execute } = usePromise(
-  async (_signal, label: string) => {
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 2000))
-    return `Finished: ${label}`
-  }
-)
+const { execute, state } = usePromise(async (_signal, label: string) => {
+  await new Promise((resolve) => {
+    setTimeout(resolve, Math.random() * 2000)
+  })
+  return `Finished: ${label}`
+})
 </script>
 
 <template>
-  <button @click="execute('A')">Run A</button>
-  <button @click="execute('B')">Run B</button>
+  <button @click="execute('A')">
+    Run A
+  </button>
 
-  <div v-if="state.status === 'pending'">Running...</div>
-  <div v-else-if="state.status === 'error'">{{ state.error }}</div>
+  <button @click="execute('B')">
+    Run B
+  </button>
+
+  <div v-if="state.status === 'pending'">
+    Running...
+  </div>
+
+  <div v-else-if="state.status === 'error'">
+    {{ state.error }}
+  </div>
+
   <pre v-else>{{ state.data }}</pre>
 </template>
 ```
