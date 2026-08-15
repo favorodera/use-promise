@@ -66,7 +66,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build Packages
-        run: pnpm build --filter='./packages/*'
+        run: pnpm build
 
       - name: Publish Preview to pkg-pr-new
-        run: pnpm dlx pkg-pr-new publish --pnpm --packageManager="npm,pnpm,bun,yarn" './packages/*'
+        run: pnpm dlx pkg-pr-new publish --pnpm --packageManager="npm,pnpm,bun,yarn"'
