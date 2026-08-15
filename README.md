@@ -1,14 +1,12 @@
 <div align="center">
 <h1><code>usePromise</code></h1>
-<p><strong>Foundation for your Vue documentation.</strong></p>
+<p><strong>A Vue composable for async operations with reactive state, cancellation, and race-condition safety.</strong></p>
 <p>
 <a href="https://npmx.dev/package/@favorodera/use-promise"><img src="https://img.shields.io/npm/v/@favorodera/use-promise.svg?style=plastic&label=NPM%20Version&color=blue" alt="NPM Version"></a>
 <a href="https://npmx.dev/package/@favorodera/use-promise"><img src="https://img.shields.io/npm/dt/@favorodera/use-promise.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
 <a href="https://npmx.dev/package/@favorodera/use-promise"><img src="https://img.shields.io/npm/unpacked-size/@favorodera/use-promise?style=plastic&label=NPM%20Unpacked%20Size&color=blue" alt="NPM Unpacked Size"></a>
 </p>
 </div>
-
-A Vue composable for async operations with reactive state, cancellation, and race-condition safety.
 
 ```bash
 npm install @favorodera/use-promise
