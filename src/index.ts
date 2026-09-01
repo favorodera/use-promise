@@ -72,6 +72,8 @@ export function usePromise<TData = unknown, TError extends Error = Error, TArgum
   async function execute(...args: TArguments): Promise<TData | undefined> {
     const currentId = ++executionId
 
+    const isIdsSame = currentId !== executionId
+
     abort()
 
     controller = new AbortController()
@@ -88,12 +90,13 @@ export function usePromise<TData = unknown, TError extends Error = Error, TArgum
       const data = await callback(signal, ...args)
 
       // Ignore stale or aborted responses
-      if (signal.aborted || currentId !== executionId) return
+      if (isIdsSame || signal.aborted) return
 
       state.value = { data, error: undefined, status: 'success' }
       return data
     } catch (error) {
-      if (signal.aborted || currentId !== executionId) return
+      // Ignore stale or aborted responses
+      if (isIdsSame || signal.aborted) return
 
       state.value = {
         data: state.value.data,

@@ -111,12 +111,12 @@ describe('error path', () => {
 
 describe('data preservation', () => {
   it('preserves data during pending state (no UI flicker)', async () => {
-    let firstCall = true
+    let isFirstCall = true
     const slow = deferred<string>()
 
     const { execute, state } = usePromise((_signal: AbortSignal) => {
-      if (firstCall) {
-        firstCall = false
+      if (isFirstCall) {
+        isFirstCall = false
         return Promise.resolve('cached')
       }
       return slow.promise
@@ -184,12 +184,12 @@ describe('abort behaviour', () => {
   })
 
   it('preserves existing data on abort', async () => {
-    let first = true
+    let isFirst = true
     const pending = deferred<string>()
 
     const { abort, execute, state } = usePromise((_signal: AbortSignal) => {
-      if (first) {
-        first = false
+      if (isFirst) {
+        isFirst = false
         return Promise.resolve('kept')
       }
       return pending.promise
@@ -209,11 +209,11 @@ describe('abort behaviour', () => {
   })
 
   it('can re-execute after abort', async () => {
-    let first = true
+    let isFirst = true
 
     const { execute } = usePromise((_signal: AbortSignal) => {
-      if (first) {
-        first = false
+      if (isFirst) {
+        isFirst = false
         return new Promise(() => {
           // never resolves
         })

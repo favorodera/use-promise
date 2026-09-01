@@ -27,11 +27,9 @@
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "engines": {
-    "node": ">=22.0.0",
+    "node": ">=24.0.0",
     "pnpm": ">=11.0.0"
   },
   "scripts": {
@@ -48,17 +46,17 @@
     "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@favorodera/eslint-config": "^1.0.4",
-    "@types/node": "^26.2.0",
+    "@favorodera/eslint-config": "^1.1.2",
+    "@types/node": "^26.4.0",
     "@vitejs/plugin-vue": "^6.0.8",
-    "@vitest/ui": "4.1.10",
-    "eslint": "^10.8.1",
+    "@vitest/ui": "4.1.11",
+    "eslint": "^10.9.1",
     "relizy": "^1.4.9",
     "tsdown": "^0.22.14",
     "typescript": "^6.0.3",
-    "vite": "^8.2.1",
-    "vitest": "^4.1.10",
-    "vue-tsc": "^3.3.9"
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11",
+    "vue-tsc": "^3.3.11"
   },
   "publishConfig": {
     "access": "public"

@@ -1,17 +1,10 @@
 /**
  * Creates a controllable promise for precise async timing.
  * @template TData The type of the resolved value.
- * @template TError The type of the rejected value.
  * @returns An object containing the promise, its resolve function, and its reject function.
  */
-export function deferred<TData, TError = unknown>() {
-  let resolve!: (value: TData) => void
-  let reject!: (reason?: TError) => void
-
-  const promise = new Promise<TData>((resolved, rejected) => {
-    resolve = resolved
-    reject = rejected
-  })
+export function deferred<TData>() {
+  const { promise, reject, resolve } = Promise.withResolvers<TData>()
 
   return { promise, reject, resolve }
 }
