@@ -2,7 +2,7 @@
   "name": "@favorodera/use-promise",
   "type": "module",
   "version": "1.0.2",
-  "packageManager": "pnpm@11.20.0",
+  "packageManager": "pnpm@11.25.0",
   "description": "A Vue composable for managing async operations with reactive state, cancellation, and race-condition safety.",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
