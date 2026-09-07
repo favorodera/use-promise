@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.0.2...v1.0.3
+
+[compare changes](https://github.com/favorodera/use-promise/compare/v1.0.2...v1.0.3)
+
+### Fixed
+
+- **use-promise:** Fix stale response check ([b543ae0](https://github.com/favorodera/use-promise/commit/b543ae0))
+
+  - Check execution ID after async call completes
+  - Prevent race condition state updates from old runs
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v1.0.1...v1.0.2
 
 [compare changes](https://github.com/favorodera/use-promise/compare/v1.0.1...v1.0.2)
