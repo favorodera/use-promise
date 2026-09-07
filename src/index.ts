@@ -72,8 +72,6 @@ export function usePromise<TData = unknown, TError extends Error = Error, TArgum
   async function execute(...args: TArguments): Promise<TData | undefined> {
     const currentId = ++executionId
 
-    const isIdsSame = currentId !== executionId
-
     abort()
 
     controller = new AbortController()
@@ -86,17 +84,26 @@ export function usePromise<TData = unknown, TError extends Error = Error, TArgum
     }
 
     try {
-      // eslint-disable-next-line node/callback-return
+    // eslint-disable-next-line node/callback-return
       const data = await callback(signal, ...args)
 
       // Ignore stale or aborted responses
-      if (isIdsSame || signal.aborted) return
+      if (currentId !== executionId || signal.aborted) {
+        return
+      }
 
-      state.value = { data, error: undefined, status: 'success' }
+      state.value = {
+        data,
+        error: undefined,
+        status: 'success',
+      }
+
       return data
     } catch (error) {
-      // Ignore stale or aborted responses
-      if (isIdsSame || signal.aborted) return
+    // Ignore stale or aborted responses
+      if (currentId !== executionId || signal.aborted) {
+        return
+      }
 
       state.value = {
         data: state.value.data,

@@ -27,9 +27,7 @@
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "engines": {
     "node": ">=24.0.0",
     "pnpm": ">=11.0.0"
