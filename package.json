@@ -54,7 +54,7 @@
     "@vitest/ui": "4.1.11",
     "eslint": "^10.9.1",
     "relizy": "^1.4.9",
-    "tsdown": "^0.22.14",
+    "tsdown": "^0.23.0",
     "typescript": "^6.0.3",
     "vite": "^8.2.2",
     "vitest": "^4.1.11",
