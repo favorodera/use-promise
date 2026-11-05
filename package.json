@@ -48,7 +48,7 @@
     "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@favorodera/eslint-config": "^1.1.2",
+    "@favorodera/eslint-config": "^3.0.0",
     "@types/node": "^26.4.0",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vitest/ui": "5.0.5",
